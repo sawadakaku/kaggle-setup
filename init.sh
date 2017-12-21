@@ -8,8 +8,6 @@ sudo apt-get install -y git build-essential libatlas-base-dev
 sudo apt-get install -y vim-gnome mosh tmux htop p7zip-full
 sudo apt-get install -y python3-dev
 git config --global credential.helper 'cache --timeout=3600'
-git config --global user.email "kaku.sawada.ak@gmail.com"
-git config --global user.name "Sawada Kaku"
 
 # anaconda
 # http://stuarteberg.github.io/conda-docs/help/silent.html
@@ -64,5 +62,7 @@ ln -sf ~/dotfiles/.gitconfig ~/.gitconfig
 ln -sf ~/dotfiles/.gitignore_global ~/.gitignore_global
 ln -sf ~/dotfiles/dict  ~/.vim/dict
 
-head -n 3 ~/dotfiles/.gitconfig tmp
-mv tmp ~/dotfiles/.gitconfig
+if grep '\[url "github:"\]' ~/dotfiles/.gitconfig > /dev/null; then
+    head -n 3 ~/dotfiles/.gitconfig > tmp
+    mv tmp ~/dotfiles/.gitconfig
+fi
