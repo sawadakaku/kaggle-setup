@@ -12,7 +12,7 @@ git config --global credential.helper 'cache --timeout=3600'
 # anaconda
 # http://stuarteberg.github.io/conda-docs/help/silent.html
 if ! [ -d ~/anaconda3/ ]; then
-    wget --quiet https://repo.continuum.io/archive/Anaconda3-5.0.0-Linux-x86_64.sh -O lib/anaconda.sh
+    wget --quiet https://repo.continuum.io/archive/Anaconda3-5.3.1-Linux-x86_64.sh -O lib/anaconda.sh
     /bin/bash lib/anaconda.sh -b
 fi
 
@@ -24,43 +24,67 @@ shopt -s expand_aliases
 source ~/.bashrc
 # export PATH=~/anaconda3/bin:$PATH
 
-pip install xgboost
-pip install lightgbm
-pip install tensorflow
-pip install keras
-pip install hyperopt
+python3 -m pip install \
+    boto3 \
+    catboost \
+    eli5 \
+    fastFM \
+    flake8 \
+    gensim \
+    google-cloud-bigquery \
+    h5py \
+    hyperopt \
+    jedi \
+    joblib \
+    jupyter \
+    jupyterthemes \
+    keras \
+    lightgbm \
+    matplotlib \
+    networkx==1.11 \
+    nltk \
+    numpy \
+    opencv-python \
+    optuna \
+    pandas \
+    pillow \
+    pydot_ng \
+    scikit-learn \
+    scipy \
+    seaborn \
+    shap \
+    sympy \
+    tensorboardX \
+    tensorflow \
+    torch \
+    torchvision \
+    tqdm \
+    xgboost \
+
 
 # set backend for matplotlib to Agg
 matplotlibrc_path=$(python -c "import site, os, fileinput; packages_dir = site.getsitepackages()[0]; print(os.path.join(packages_dir, 'matplotlib', 'mpl-data', 'matplotlibrc'))") && \
 sed -i 's/^backend      : qt5agg/backend      : agg/' $matplotlibrc_path
 
-# install gensim(word2vec is slow?)
-pip install gensim
-
-cd
 
 # setup dotfile
+cd
 git clone git://github.com/sawadakaku/dotfiles.git
 
-mkdir ~/.vim
-mkdir ~/.vim/ftplugin
-mkdir ~/.vim/dict
+cd ~/dotfiles
+make tmux.conf
+make bash
 
 pythonset="python3 << EOF
 import os
 import sys
 
-path = os.path.expanduser(\"~/anaconda3/lib/python3.6/site-packages\")
+path = os.path.expanduser(\"~/anaconda3/lib/python3.7/site-packages\")
 if not path in sys.path:
     sys.path.append(path)
 EOF"
 
 echo "$pythonset" > ~/.vim/ftplugin/python.vim
-
-ln -sf ~/dotfiles/.vimrc ~/.vimrc
-ln -sf ~/dotfiles/.gitconfig ~/.gitconfig
-ln -sf ~/dotfiles/.gitignore_global ~/.gitignore_global
-ln -sf ~/dotfiles/dict  ~/.vim/dict
 
 if grep '\[url "github:"\]' ~/dotfiles/.gitconfig > /dev/null; then
     head -n 3 ~/dotfiles/.gitconfig > tmp
